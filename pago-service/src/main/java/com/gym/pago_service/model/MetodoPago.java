@@ -1,6 +1,4 @@
-package com.gym.rutina_service.model;
-
-import java.time.LocalDate;
+package com.gym.pago_service.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,32 +19,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "rutinas")
-public class Rutina {
+@Table(name = "metodo_pago")
+public class MetodoPago {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idMetodoPago;
 
-    @NotNull(message = "El id del socio es obligatorio")
-    @Column(name = "id_socio", nullable = false)
-    private Integer idSocio;
-
-    @NotNull(message = "El id del entrenador es obligatorio")
-    @Column(name = "id_entrenador", nullable = false)
-    private Integer idEntrenador;
-
-    @NotBlank(message = "El nombre de la rutina es obligatorio")
-    @Size(min = 3, max = 100)
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(length = 255)
+    @Column(length = 200)
     private String descripcion;
-
-    @NotNull(message = "La fecha de asignación es obligatoria")
-    @Column(nullable = false)
-    private LocalDate fechaAsignacion;
 
     @NotNull(message = "El estado es obligatorio")
     @Column(nullable = false)

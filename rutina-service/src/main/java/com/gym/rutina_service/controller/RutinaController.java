@@ -58,8 +58,7 @@ public class RutinaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RutinaDTO> actualizarRutina(@PathVariable Integer id,
-                                                      @RequestBody RutinaDTO dto) {
+    public ResponseEntity<RutinaDTO> actualizarRutina(@PathVariable Integer id, @RequestBody RutinaDTO dto) {
         try {
             RutinaDTO actualizada = rutinaService.actualizar(id, dto);
             return new ResponseEntity<>(actualizada, HttpStatus.OK);

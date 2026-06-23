@@ -34,7 +34,7 @@ public class RutinaService {
 
     public RutinaDTO guardar(RutinaDTO dto) {
         // El socio y el entrenador viven en otros microservicios (socio-service y
-        // actividad-service), por lo que aquí solo guardamos su id. La validación
+        // actividad-service), por lo que aqui solo guardamos su id. La validacion
         // de que existan se hace contra esos servicios vía REST (WebClient/Feign).
         Rutina rutina = new Rutina();
 
