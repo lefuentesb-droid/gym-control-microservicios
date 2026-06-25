@@ -1,13 +1,12 @@
-package com.gym.rutina_service;
+package com.gym.api_gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RutinaServiceApplicationTests {
+class ApiGatewayApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }

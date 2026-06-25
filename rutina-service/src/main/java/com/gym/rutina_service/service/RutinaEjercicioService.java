@@ -19,6 +19,12 @@ public class RutinaEjercicioService {
         return repository.findAll().stream().map(this::convertirADTO).toList();
     }
 
+    public RutinaEjercicioDTO buscarPorId(Integer id) {
+        RutinaEjercicio rutinaEjercicio = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rutina ejercicio no encontrada"));
+        return convertirADTO(rutinaEjercicio);
+    }
+
     public RutinaEjercicioDTO crear(RutinaEjercicio rutina) {
         return convertirADTO(repository.save(rutina));
     }
@@ -37,12 +43,10 @@ public class RutinaEjercicioService {
     }
 
     public String eliminar(Integer id) {
-        try {
-            repository.deleteById(id); 
-            return "Eliminado exitosamente.";
-        } catch (Exception e) {
-            return "Error al eliminar.";
-        }
+        RutinaEjercicio rutinaEjercicio = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rutina ejercicio no encontrada"));
+        repository.delete(rutinaEjercicio);
+        return "Rutina ejercicio eliminada exitosamente";
     }
 
     private RutinaEjercicioDTO convertirADTO(RutinaEjercicio rutina) {

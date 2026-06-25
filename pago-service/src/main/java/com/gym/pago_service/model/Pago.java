@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,6 +32,7 @@ public class Pago {
     private Integer id;
 
     @NotNull(message = "El monto es obligatorio")
+    @Min(value = 1, message = "El monto debe ser mayor a 0")
     @Column(nullable = false)
     private Double monto;
 
@@ -50,14 +52,17 @@ public class Pago {
     // El socio y la membresía viven en socio-service (otra base de datos),
     // por lo que aquí solo guardamos su id. Se validan vía REST (WebClient).
     @NotNull(message = "El id del socio es obligatorio")
+    @Min(value = 1, message = "El id del socio debe ser mayor a 0")
     @Column(name = "id_socio", nullable = false)
     private Integer idSocio;
 
     @NotNull(message = "El id de la membresía es obligatorio")
+    @Min(value = 1, message = "El id de la membresía debe ser mayor a 0")
     @Column(name = "id_membresia", nullable = false)
     private Integer idMembresia;
 
     // MetodoPago sí pertenece a este microservicio -> relación JPA real.
+    @NotNull(message = "El método de pago es obligatorio")
     @ManyToOne
     @JoinColumn(name = "id_metodo_pago", nullable = false)
     private MetodoPago metodoPago;

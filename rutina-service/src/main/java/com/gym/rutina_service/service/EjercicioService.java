@@ -43,13 +43,13 @@ public class EjercicioService {
     }
 
     public String eliminar(Integer id) {
-        try {
-            Ejercicio ex = repository.findById(id).orElseThrow(() -> new RuntimeException("No existe"));
-            repository.delete(ex); 
-            return "Eliminado exitosamente.";
-        } catch (Exception e) {
-            return "Error al eliminar.";
-        }
+        Ejercicio ejercicio = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado"));
+
+        ejercicio.setEstado(false);
+        repository.save(ejercicio);
+
+        return "Ejercicio deshabilitado correctamente";
     }
 
     private EjercicioDTO convertirADTO(Ejercicio e) {

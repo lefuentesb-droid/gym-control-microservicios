@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -28,18 +29,22 @@ public class RutinaEjercicio {
     private Integer id;
 
     @NotNull(message = "Las series son obligatorias")
+    @Min(value = 1, message = "Las series deben ser al menos 1")
     @Column(nullable = false)
     private Integer series;
 
     @NotNull(message = "Las repeticiones son obligatorias")
+    @Min(value = 1, message = "Las repeticiones deben ser al menos 1")
     @Column(nullable = false)
     private Integer repeticiones;
 
     @NotNull(message = "El tiempo de descanso es obligatorio")
+    @Min(value = 1, message = "El descanso debe ser al menos 1 segundo")
     @Column(name = "descanso_segundos", nullable = false)
     private Integer descansoSegundos;
 
     @NotNull(message = "El orden del ejercicio es obligatorio")
+    @Min(value = 1, message = "El orden debe ser al menos 1")
     @Column(nullable = false)
     private Integer orden;
 
@@ -48,13 +53,15 @@ public class RutinaEjercicio {
     private String observaciones;
 
     //Relación con rutina (FK)
+    @NotNull(message = "La rutina es obligatoria")
     @ManyToOne
-    @JoinColumn(name = "id_rutina")
+    @JoinColumn(name = "id_rutina", nullable = false)
     private Rutina rutina;
 
     //Relacion con ejercicio (FK)
+    @NotNull(message = "El ejercicio es obligatorio")
     @ManyToOne
-    @JoinColumn(name = "id_ejercicio")
+    @JoinColumn(name = "id_ejercicio", nullable = false)
     private Ejercicio ejercicio;
     
 }

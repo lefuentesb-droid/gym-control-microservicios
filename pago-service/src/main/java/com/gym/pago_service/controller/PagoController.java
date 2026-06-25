@@ -89,7 +89,7 @@ public class PagoController {
 
     @Operation(
         summary = "Registrar un pago",
-        description = "Crea un nuevo pago en el sistema. El id_socio y id_membresia son validados contra socio-service vía REST."
+        description = "Crea un nuevo pago y valida que el método de pago exista y esté disponible."
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Pago registrado correctamente"),
