@@ -23,6 +23,9 @@ public class MetodoPagoService {
     }
 
     public MetodoPagoDTO buscarPorId(Integer id) {
+        if (id == null) {
+            throw new RuntimeException("El ID del método de pago es obligatorio");
+        }
         MetodoPago metodoPago = metodoPagoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Método de pago no encontrado"));
 
@@ -30,10 +33,16 @@ public class MetodoPagoService {
     }
 
     public MetodoPago guardar(MetodoPago metodoPago) {
+        if (metodoPago == null) {
+            throw new RuntimeException("Los datos del método de pago son obligatorios");
+        }
         return metodoPagoRepository.save(metodoPago);
     }
 
     public MetodoPago actualizar(Integer id, MetodoPago metodoPago) {
+        if (id == null) {
+            throw new RuntimeException("El ID del método de pago es obligatorio");
+        }
         MetodoPago existente = metodoPagoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Método de pago no encontrado"));
 
@@ -53,10 +62,15 @@ public class MetodoPagoService {
     }
 
     public String eliminar(Integer id) {
+        if (id == null) {
+            return "El ID del método de pago es obligatorio";
+        }
         try {
             MetodoPago metodoPago = metodoPagoRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Método de pago no encontrado"));
-
+            if (metodoPago == null) {
+                return "Método de pago no encontrado";
+            }
             metodoPagoRepository.delete(metodoPago);
             return "Método de pago eliminado correctamente";
 

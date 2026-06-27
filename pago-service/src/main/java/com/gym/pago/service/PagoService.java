@@ -35,6 +35,9 @@ public class PagoService {
     }
 
     public PagoDTO buscarPorId(Integer id) {
+        if (id == null) {
+            throw new RuntimeException("El ID del pago es obligatorio");
+        }
         Pago pago = pagoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
 
@@ -54,42 +57,51 @@ public class PagoService {
     }
 
     public Pago actualizar(Integer id, Pago pago) {
-        Pago existente = pagoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
 
-        if (pago.getSocioId() != null) {
-            validarSocio(pago.getSocioId());
-            existente.setSocioId(pago.getSocioId());
-        }
+    if (id == null) {
+        throw new RuntimeException("El ID del pago es obligatorio");
+    }
+    if (pago == null) {
+        throw new RuntimeException("Los datos del pago son obligatorios");
+    }
 
-        if (pago.getMetodoPagoId() != null) {
-            validarMetodoPago(pago.getMetodoPagoId());
-            existente.setMetodoPagoId(pago.getMetodoPagoId());
-        }
+    Pago existente = pagoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
 
-        if (pago.getMonto() != null) {
-            existente.setMonto(pago.getMonto());
-        }
-
-        if (pago.getFechaPago() != null) {
-            existente.setFechaPago(pago.getFechaPago());
-        }
-
-        if (pago.getEstado() != null) {
-            existente.setEstado(pago.getEstado());
-        }
-
+    if (pago.getSocioId() != null) {
+        validarSocio(pago.getSocioId());
+        existente.setSocioId(pago.getSocioId());
+    }
+    if (pago.getMetodoPagoId() != null) {
+        validarMetodoPago(pago.getMetodoPagoId());
+        existente.setMetodoPagoId(pago.getMetodoPagoId());
+    }
+    if (pago.getMonto() != null) {
+        existente.setMonto(pago.getMonto());
+    }
+    if (pago.getFechaPago() != null) {
+        existente.setFechaPago(pago.getFechaPago());
+    }
+    if (pago.getEstado() != null) {
+        existente.setEstado(pago.getEstado());
+    }
         return pagoRepository.save(existente);
     }
 
     public String eliminar(Integer id) {
+
+        if (id == null) {
+        return "El ID del pago es obligatorio";
+        }
         try {
+            
             Pago pago = pagoRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
-
+            if (pago == null) {
+                return "Pago no encontrado";
+            }
             pagoRepository.delete(pago);
-            return "Pago eliminado correctamente";
-
+            return "Pago eliminado correctamente";   
         } catch (RuntimeException e) {
             return e.getMessage();
         }
@@ -135,9 +147,9 @@ public class PagoService {
 
         if (!metodoPago.getActivo()) {
             throw new RuntimeException("El método de pago no está activo");
+            }
         }
-    }
-
+        
     private PagoDTO convertirADTO(Pago pago) {
         PagoDTO dto = new PagoDTO();
         dto.setId(pago.getId());
