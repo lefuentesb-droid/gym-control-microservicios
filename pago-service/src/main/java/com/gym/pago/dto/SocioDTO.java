@@ -1,31 +1,20 @@
-package com.gym.socio.dto;
+package com.gym.pago.dto;
+
 import java.time.LocalDate;
+
 import lombok.Data;
 
 @Data
 public class SocioDTO {
 
     private Integer id;
-    
     private String rut;
-
-    
     private String nombre;
-
-   
     private String apellido;
-
-   
     private String correo;
-
     private String telefono;
-
-    
     private String direccion;
-
     private LocalDate fechaNacimiento;
-
-    
     private Boolean estado;
     
 }

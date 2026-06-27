@@ -77,7 +77,7 @@ public class SocioService {
 
     private SocioDTO convertirDto(Socio soci) {
         SocioDTO dto = new SocioDTO();
-        dto.setIdsocio(soci.getId());
+        dto.setId(soci.getId());
         dto.setRut(soci.getRut());
         dto.setNombre(soci.getNombre());
         dto.setApellido(soci.getApellido());
