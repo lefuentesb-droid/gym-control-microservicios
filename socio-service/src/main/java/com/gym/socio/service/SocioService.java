@@ -1,16 +1,20 @@
 package com.gym.socio.service;
 
+import com.gym.socio.dto.SocioDTO;
+import com.gym.socio.model.Socio;
+
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.gym.socio.dto.SocioDTO;
-import com.gym.socio.model.Socio;
+
 import com.gym.socio.repository.SocioRepository;
 
+import jakarta.transaction.Transactional;
 
 
 @Service
+@Transactional
 public class SocioService {
 
     @Autowired
@@ -71,13 +75,13 @@ public class SocioService {
     }
 
 
-    public List<SocioDTO> buscarPorEstado(Boolean estado){
+    public List<SocioDTO> buscarPorEstado(boolean estado){
        return socioRepository.findByEstado(estado).stream().map(this::convertirDto).toList();
     }
 
     private SocioDTO convertirDto(Socio soci) {
         SocioDTO dto = new SocioDTO();
-        dto.setIdsocio(soci.getId());
+        dto.setId(soci.getId());
         dto.setRut(soci.getRut());
         dto.setNombre(soci.getNombre());
         dto.setApellido(soci.getApellido());

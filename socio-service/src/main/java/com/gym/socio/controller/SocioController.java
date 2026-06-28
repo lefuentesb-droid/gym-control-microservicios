@@ -60,7 +60,7 @@ public class SocioController {
         )
     )
     @GetMapping
-    public ResponseEntity<List<SocioDTO>> todosLosUsuario() {
+    public ResponseEntity<List<SocioDTO>> todosLosSocios() {
         List<SocioDTO> socios = socioService.obtenerTodos();
         if (socios.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: pagos-service
+              uri: lb://pago-service
+              predicates:
+                - Path=/api/v1/pagos/**, /pago/api-docs/**
+
+            - id: metodos-pago-service
+              uri: lb://pago-service
+              predicates:
+                - Path=/api/v1/metodos-pago/**, /metodos-pago/api-docs/**
+
+            - id: rutinas-service
+              uri: lb://rutina-service
+              predicates:
+                - Path=/api/v1/rutinas/**, /rutina/api-docs/**
+
+            - id: ejercicios-service
+              uri: lb://rutina-service
+              predicates:
+                - Path=/api/v1/ejercicios/**, /ejercicios/api-docs/**
+
+            - id: rutina-ejercicios-service
+              uri: lb://rutina-service
+              predicates:
+                - Path=/api/v1/rutina-ejercicios/**, /rutina-ejercicios/api-docs/**
+            - id: socio-service
+              uri: lb://socio-service
+              predicates:
+              - Path=/api/v1/socios/**, /api/v1/membresia/**, /socios/api-docs/**
+
+            - id: actividad-service
+              uri: lb://actividad-service
+              predicates:
+              - Path=/api/v1/entrenadores/**, /api/v1/clases/**, /api/v1/reservas/**, /actividad/api-docs/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: Microservicio Pago
+        url: /pago/api-docs
+      - name: Microservicio Rutina
+        url: /rutina/api-docs
+  api-docs:
+    enabled: true
