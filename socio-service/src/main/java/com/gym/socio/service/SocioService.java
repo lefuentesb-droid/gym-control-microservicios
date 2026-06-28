@@ -1,16 +1,20 @@
 package com.gym.socio.service;
 
+import com.gym.socio.dto.SocioDTO;
+import com.gym.socio.model.Socio;
+
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.gym.socio.dto.SocioDTO;
-import com.gym.socio.model.Socio;
+
 import com.gym.socio.repository.SocioRepository;
 
+import jakarta.transaction.Transactional;
 
 
 @Service
+@Transactional
 public class SocioService {
 
     @Autowired
@@ -20,27 +24,19 @@ public class SocioService {
         return socioRepository.findAll().stream().map(this::convertirDto).toList();
     }
 
-    public SocioDTO buscarPorId(Integer id) {
-    if (id == null) {//validamos porque findbyid espera un valor que no sea nulo 
-        throw new RuntimeException("El ID del socio es obligatorio");
+    public SocioDTO buscarPorId(Integer id){
+        Socio soci =socioRepository.findById(id).orElseThrow(() -> new RuntimeException("¡Usuario no encontrado!"));
+        return convertirDto(soci);
     }
-    Socio soci = socioRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-    return convertirDto(soci);
-    }
-
 
     public String eliminar(Integer id){
-    if (id == null) {
-        return "El ID del socio es obligatorio";
-    }    
     try {
             Socio socio = socioRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("¡Imposible eliminar! El Usuario con ID " + id + " no existe."));
-            socioRepository.delete(socio);
-                return "El Usuario '" + socio.getNombre() + "' ha sido retirado del registro exitosamente.";
-        } catch (RuntimeException e) {
-                return e.getMessage();
+           socioRepository.delete(socio);
+            return "El Usuario '" + socio.getNombre() + "' ha sido retirado del registro exitosamente.";
+    } catch (RuntimeException e) {
+            return e.getMessage();
         }
     }
     
@@ -49,13 +45,7 @@ public class SocioService {
        return socioRepository.save(socio);
     }
 
-
     public Socio actualizarSocio(Integer id,Socio socio){
-
-        if (id == null) {
-        throw new RuntimeException("El ID del socio es obligatorio");
-        }
-
         Socio soci = socioRepository.findById(id).orElseThrow(() -> new RuntimeException("¡El socio no existe en los registros!"));
         if(socio.getRut() != null){
             soci.setRut(socio.getRut());
@@ -85,7 +75,7 @@ public class SocioService {
     }
 
 
-    public List<SocioDTO> buscarPorEstado(Boolean estado){
+    public List<SocioDTO> buscarPorEstado(boolean estado){
        return socioRepository.findByEstado(estado).stream().map(this::convertirDto).toList();
     }
 
