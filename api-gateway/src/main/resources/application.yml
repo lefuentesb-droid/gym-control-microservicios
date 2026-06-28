@@ -33,6 +33,15 @@ spring:
               uri: lb://rutina-service
               predicates:
                 - Path=/api/v1/rutina-ejercicios/**, /rutina-ejercicios/api-docs/**
+            - id: socio-service
+              uri: lb://socio-service
+              predicates:
+              - Path=/api/v1/socios/**, /api/v1/membresia/**, /socios/api-docs/**
+
+            - id: actividad-service
+              uri: lb://actividad-service
+              predicates:
+              - Path=/api/v1/entrenadores/**, /api/v1/clases/**, /api/v1/reservas/**, /actividad/api-docs/**
 
 eureka:
   client:
