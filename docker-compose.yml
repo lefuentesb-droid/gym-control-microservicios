@@ -1,0 +1,128 @@
+
+
+services:
+  mariadb-db:
+    image: mariadb:10.11
+    container_name: mariadb-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ./docker/init-db:/docker-entrypoint-initdb.d
+    networks:
+      - network-gym
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - network-gym
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - network-gym
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+
+  socio-service:
+    build: ./socio-service
+    container_name: socio-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mariadb-db:3306/db_socios_gym
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+    networks:
+      - network-gym
+    depends_on:
+      mariadb-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  actividad-service:
+    build: ./actividad-service
+    container_name: actividad-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mariadb-db:3306/db_actividades_gym
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+    networks:
+      - network-gym
+    depends_on:
+      mariadb-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  pago-service:
+    build: ./pago-service
+    container_name: pago-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mariadb-db:3306/db_pago_service_dev
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+    networks:
+      - network-gym
+    depends_on:
+      mariadb-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  rutina-service:
+    build: ./rutina-service
+    container_name: rutina-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mariadb-db:3306/db_rutina_service_dev
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+    networks:
+      - network-gym
+    depends_on:
+      mariadb-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+networks:
+  network-gym:
+    driver: bridge

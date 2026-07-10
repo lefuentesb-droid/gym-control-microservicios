@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS db_socios_gym;
+CREATE DATABASE IF NOT EXISTS db_actividades_gym;
+CREATE DATABASE IF NOT EXISTS db_pago_service_dev;
+CREATE DATABASE IF NOT EXISTS db_rutina_service_dev;
