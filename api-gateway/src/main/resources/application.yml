@@ -1,5 +1,6 @@
 server:
   port: 8080
+  forward-headers-strategy: framework
 
 spring:
   application:
@@ -8,6 +9,16 @@ spring:
     gateway:
       server:
         webmvc:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowed-origin-patterns: "*"
+                allowed-methods: "*"
+                allowed-headers: "*"
+                exposed-headers: "*"
+                allow-credentials: false
+                max-age: 3600
+
           routes:
             - id: pagos-service
               uri: lb://pago-service
@@ -33,11 +44,22 @@ spring:
               uri: lb://rutina-service
               predicates:
                 - Path=/api/v1/rutina-ejercicios/**, /rutina-ejercicios/api-docs/**
+            - id: socio-service
+              uri: lb://socio-service
+              predicates:
+              - Path=/api/v1/socios/**, /api/v1/membresia/**, /socios/api-docs/**
+
+            - id: actividad-service
+              uri: lb://actividad-service
+              predicates:
+              - Path=/api/v1/entrenadores/**, /api/v1/clases/**, /api/v1/reservas/**, /actividad/api-docs/**
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: false
 
 springdoc:
   swagger-ui:
@@ -47,5 +69,7 @@ springdoc:
         url: /pago/api-docs
       - name: Microservicio Rutina
         url: /rutina/api-docs
+    disable-swagger-default-url: true
+    display-request-duration: true
   api-docs:
     enabled: true

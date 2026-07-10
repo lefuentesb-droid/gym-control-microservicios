@@ -1,16 +1,21 @@
 server:
   port: 0
+  forward-headers-strategy: framework
 
 springdoc:
   swagger-ui:
     path: /doc/swagger-ui/index.html
   api-docs:
     path: /rutina/api-docs
+  packages-to-scan: com.gym.rutina_service.controller
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
 
 spring:
   application:
@@ -21,7 +26,17 @@ spring:
   jpa:
     show-sql: true
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  mvc:
+    cors:
+      mappings:
+        "/**":
+          allowed-origin-patterns: "*"
+          allowed-methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+          allowed-headers: "*"
+          exposed-headers: "*"
+          allow-credentials: false
+          max-age: 3600
 
 ---
 
@@ -31,7 +46,7 @@ spring:
       on-profile: dev
   datasource:
     username: root
-    url: jdbc:mysql://localhost:3306/db_rutina_service_dev?createDatabaseIfNotExist=true
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:3306/db_rutina_service_dev?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     driverClassName: com.mysql.cj.jdbc.Driver
     password: ''
   jpa:
